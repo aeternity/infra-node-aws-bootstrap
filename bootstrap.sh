@@ -20,7 +20,7 @@ bootstrap_version="${bootstrap_version}"
 INSTANCE_ID=$(ec2metadata --instance-id)
 REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
 WAIT_TIME=0
-while [[ -z "$bootstrap_version" && $WAIT_TIME -lt 60 ]]; do
+while [[ -z "$bootstrap_version" || "$bootstrap_version" == "None" && $WAIT_TIME -lt 60 ]]; do
     bootstrap_version=$(aws ec2 describe-tags \
         --region=$REGION \
         --filters "Name=resource-id,Values=$INSTANCE_ID" "Name=key,Values=bootstrap_version" \
