@@ -35,7 +35,7 @@ if [ ! -d "/infrastructure" ] ; then
     git clone -b $bootstrap_version --single-branch https://github.com/aeternity/infrastructure.git /infrastructure
 else
     git -C /infrastructure fetch origin $bootstrap_version
-    git -C /infrastructure reset --hard origin/$bootstrap_version
+    git -C /infrastructure reset --hard FETCH_HEAD
 fi
 
 bash /infrastructure/scripts/bootstrap.sh
