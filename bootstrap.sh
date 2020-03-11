@@ -3,16 +3,18 @@
 # Don't enable debug mode in this script as secrets will ends-up in the logs!
 set -eo pipefail
 
-# Run Ansible in virtual environment
-source /var/venv/bin/activate
+if [ -f /var/venv/bin/activate ] ; then
+    # Run Ansible in virtual environment
+    source /var/venv/bin/activate
 
-# Dirty ugly hack to workaround missing python-apt in the virtualenv
-# It cannot be (?!) installed in the virtualenv
-# If --system-site-packages is used all the packages are copied and specifically python-cryptography
-# Distro python-cryptography is OLD and if copied to the virtualenv,
-# it prevents pip to installed newer package version for some reason,
-# but ansible (paramico) does not work with the OLD One
-cp -r /usr/lib/python3/dist-packages/apt* /var/venv/lib/python3.5/site-packages/
+    # Dirty ugly hack to workaround missing python-apt in the virtualenv
+    # It cannot be (?!) installed in the virtualenv
+    # If --system-site-packages is used all the packages are copied and specifically python-cryptography
+    # Distro python-cryptography is OLD and if copied to the virtualenv,
+    # it prevents pip to installed newer package version for some reason,
+    # but ansible (paramico) does not work with the OLD One
+    cp -r /usr/lib/python3/dist-packages/apt* /var/venv/lib/python3.5/site-packages/
+fi
 
 # Backward compatibility, passed by the Terraform template to cloud.init user_data
 bootstrap_version="${bootstrap_version}"
